@@ -1,4 +1,4 @@
-# Twitter Program
+# Twitter Programs
 Two simple programs that access Twitter, get specific tweets from api and analyze them.
 
 ## Files
