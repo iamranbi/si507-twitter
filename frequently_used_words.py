@@ -23,12 +23,12 @@ consumer_secret = secret_data.CONSUMER_SECRET
 access_token = secret_data.ACCESS_KEY
 access_secret = secret_data.ACCESS_SECRET
 
-## code for OAuth starts
+## Start OAuth
 url = 'https://api.twitter.com/1.1/account/verify_credentials.json'
 auth = OAuth1(consumer_key, consumer_secret, access_token, access_secret)
 requests.get(url, auth=auth)
 
-## caching
+## Caching
 CACHE_FNAME = 'twitter_cache.json'
 try:
     cache_file = open(CACHE_FNAME, 'r')
@@ -64,16 +64,15 @@ def make_request_using_cache(baseurl, params):
         fw.close()
         return CACHE_DICTION[unique_ident]
 
-# get Tweets
+## Get tweets
 baseurl = 'https://api.twitter.com/1.1/statuses/user_timeline.json'
 params = {'screen_name':username, 'count':num_tweets}
-# fetch tweets
 r_json=make_request_using_cache(baseurl, params)
-##write the json returned
+#write the json returned
 #with open('tweet.json', 'w') as f:
     #json.dump(r_json,f,indent=2)
 
-# analyze Tweets
+## Analyze tweets
 def ignore_word(list_of_words):
     word_keep = []
     for word in list_of_words:
