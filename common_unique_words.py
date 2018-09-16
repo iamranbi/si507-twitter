@@ -15,15 +15,8 @@ import nltk
     #ssl._create_default_https_context = _create_unverified_https_context
 #nltk.download('punkt')
 
-
-##SI 507 hw5_twitter_ec1
-## Name: Ran Bi
-## Your section day/time: 004 Monday 7-8:30p
-## Any names of people you worked with on this assignment: worked alone
-##usage should be python3 hw5_twitter_ec1.py <username 1> <username 2> <num_tweets>
-
-##Step 1: get tweets
-#1.1 input
+## Get tweets
+# input
 username1 = sys.argv[1]
 username2 = sys.argv[2]
 num_tweets = sys.argv[3] if len(sys.argv) >= 4 else 20
@@ -32,12 +25,12 @@ consumer_secret = secret_data.CONSUMER_SECRET
 access_token = secret_data.ACCESS_KEY
 access_secret = secret_data.ACCESS_SECRET
 
-#1.2 OAuth starts
+# OAuth starts
 url = 'https://api.twitter.com/1.1/account/verify_credentials.json'
 auth = OAuth1(consumer_key, consumer_secret, access_token, access_secret)
 requests.get(url, auth=auth)
 
-#1.3 get tweets from api
+# get tweets from api
 baseurl = 'https://api.twitter.com/1.1/statuses/user_timeline.json'
 params1 = {'screen_name':username1, 'count':num_tweets}
 params2 = {'screen_name':username2, 'count':num_tweets}
@@ -46,7 +39,7 @@ resp2 = requests.get(baseurl, params2, auth=auth)
 r1_json=json.loads(resp1.text)
 r2_json=json.loads(resp2.text)
 
-#1.4 gather tweet text
+# gather tweet text
 tokenized_list1=[]
 tokenized_list2=[]
 for i in r1_json:
@@ -60,8 +53,8 @@ for i in r2_json:
     tokenized_list2=tokenized_list2+n_text
 
 
-##Step 2: analyze most frequent common words
-#2.1 function that ignores stop words
+## Analyze most frequent common words
+# function that ignores stop words
 def ignore_word(list_of_words):
     word_keep = []
     for word in list_of_words:
@@ -69,20 +62,20 @@ def ignore_word(list_of_words):
             word_keep.append(word)
     return word_keep
 
-#2.2 function that gets frequency distribution
+# function that gets frequency distribution
 def freq_dict(l):
     d=dict()
     for i in l:
         d[i]=d.get(i, 0) + 1
     return d
 
-#2.3 ignore stop words and get frequency distribution
+# ignore stop words and get frequency distribution
 tokenized_list_ignored1=ignore_word(tokenized_list1)
 tokenized_list_ignored2=ignore_word(tokenized_list2)
 freq_word1=freq_dict(tokenized_list_ignored1)
 freq_word2=freq_dict(tokenized_list_ignored2)
 
-#2.4 get common words
+# get common words
 common_keys=set(freq_word1).intersection(freq_word2)
 common=dict()
 common_five=[]
@@ -97,8 +90,8 @@ for i in common_sorted[0:5]:
 common_five_str=' '.join(common_five)
 
 
-##Step 3: analyze most frequent different words
-#3.1 removes words shared by two users
+## Analyze most frequent different words
+# removes words shared by two users
 def common_key_remove(common_keys, the_dict):
     for key in common_keys:
         if key in the_dict:
@@ -109,7 +102,7 @@ common_key_remove(common_keys,freq_word2)
 freq_word1_sorted=sorted(freq_word1.items(), key=lambda kv: kv[1], reverse=True)
 freq_word2_sorted=sorted(freq_word2.items(), key=lambda kv: kv[1], reverse=True)
 
-#3.2 get frequent diffent words
+# get frequent diffent words
 user1_diff_five=[]
 user2_diff_five=[]
 for i in freq_word1_sorted[0:5]:
@@ -124,7 +117,7 @@ user1_diff_five_str=' '.join(user1_diff_five)
 user2_diff_five_str=' '.join(user2_diff_five)
 
 
-#Step 4: output
+## Output
 print('USER 1:', username1)
 print('USER 2:', username2)
 print('TWEETS ANALYZED:', min(len(r1_json),len(r2_json)))
