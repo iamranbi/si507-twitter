@@ -15,12 +15,12 @@ Two simple programs that access Twitter and only touch your own data and analyze
 
 ## User Guide
 ### run frequently_used_words.py
-`$ python3 frequently_used_words.py \<a twitter username\> \<number of tweets to analyze\>`
-<br> e.g. `$ python3 frequently_used_words.py umsi 25`
+`$ python3 frequently_used_words.py <a twitter username> <number of tweets to analyze>`
+<br> - sample command: `$ python3 frequently_used_words.py umsi 25`
 
 ### run common_unique_words.py
-`python3 common_unique_words.py \<twitter username 1\> \<twitter username 2\> \<number of tweets to analyze\>`
-<br> e.g. `python3 common_unique_words.py umsi umichTECH 10`
+`$ python3 common_unique_words.py <twitter username 1> <twitter username 2> <number of tweets to analyze>`
+<br> - sample command: `python3 common_unique_words.py umsi umichTECH 10`
 
 ### create secrets.py
 for frequently_used_words.py and common_unique_words.py, you need to create your secrets.py file that includes:
