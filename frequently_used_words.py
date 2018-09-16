@@ -15,13 +15,6 @@ import nltk
     #ssl._create_default_https_context = _create_unverified_https_context
 #nltk.download('punkt')
 
-## SI 507 - HW5
-## COMMENT WITH:
-## Name: Ran Bi
-## Your section day/time: 004 Monday 7-8:30p
-## Any names of people you worked with on this assignment: worked alone
-
-#usage should be python3 hw5_twitter.py <username> <num_tweets>
 username = sys.argv[1]
 num_tweets = sys.argv[2]
 
@@ -30,15 +23,12 @@ consumer_secret = secret_data.CONSUMER_SECRET
 access_token = secret_data.ACCESS_KEY
 access_secret = secret_data.ACCESS_SECRET
 
-#Code for OAuth starts
+## code for OAuth starts
 url = 'https://api.twitter.com/1.1/account/verify_credentials.json'
 auth = OAuth1(consumer_key, consumer_secret, access_token, access_secret)
 requests.get(url, auth=auth)
-#Code for OAuth ends
 
-#Write your code below:
-#Code for Part 3:Caching
-##try to load the cache from file
+## caching
 CACHE_FNAME = 'twitter_cache.json'
 try:
     cache_file = open(CACHE_FNAME, 'r')
@@ -47,7 +37,7 @@ try:
     cache_file.close()
 except:
     CACHE_DICTION = {}
-##return a string that uniquely represents the fullURL of the request
+
 def params_unique_combination(baseurl, params):
     alphabetized_keys = sorted(params.keys(),reverse=True)
     res = []
@@ -57,12 +47,12 @@ def params_unique_combination(baseurl, params):
 
 def make_request_using_cache(baseurl, params):
     unique_ident = params_unique_combination(baseurl,params)
-    ##look in the cache to see if already have this data
+    # look in the cache to see if already have this data
     if unique_ident in CACHE_DICTION:
         print('Fetching cached data...')
         print('----------------')
         return CACHE_DICTION[unique_ident]
-    ##if not, fetch the data afresh, add it to the cache, write the cache to file
+    # if not, fetch the data afresh, add it to the cache, write the cache to file
     else:
         print('Making request for new data...')
         print('----------------')
@@ -74,16 +64,16 @@ def make_request_using_cache(baseurl, params):
         fw.close()
         return CACHE_DICTION[unique_ident]
 
-#Code for Part 1:Get Tweets
+# get Tweets
 baseurl = 'https://api.twitter.com/1.1/statuses/user_timeline.json'
 params = {'screen_name':username, 'count':num_tweets}
-##fetch tweets
+# fetch tweets
 r_json=make_request_using_cache(baseurl, params)
 ##write the json returned
 #with open('tweet.json', 'w') as f:
     #json.dump(r_json,f,indent=2)
 
-#Code for Part 2:Analyze Tweets
+# analyze Tweets
 def ignore_word(list_of_words):
     word_keep = []
     for word in list_of_words:
@@ -93,16 +83,16 @@ def ignore_word(list_of_words):
 
 tokenized_list=[]
 freq_word_five=[]
-##gather tweet data from the response of twitter api
+# gather tweet data from the response of twitter api
 for i in r_json:
     text=i['text']
     n_text=nltk.word_tokenize(text)
     tokenized_list=tokenized_list+n_text
-##ignore stop words
+# ignore stop words
 tokenized_list_ignored=ignore_word(tokenized_list)
-##get a frequency distribution of the tokenized list
+# get a frequency distribution of the tokenized list
 freq_word=nltk.FreqDist(tokenized_list_ignored)
-##5 most frequently used words
+# 5 most frequently used words
 for i in freq_word.most_common(5):
     ii='{}({})'.format(i[0],i[1])
     freq_word_five.append(ii)
